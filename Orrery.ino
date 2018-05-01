@@ -85,7 +85,6 @@ void loop(){
       delay(10);
 		  //delayMicroseconds(1000);
     #endif
-	//delay(100);
 }
 
 void serialEvent() {
@@ -101,23 +100,21 @@ void serialEvent() {
 	}
 }
 
-//float referenceLoactions[4] = {0.491778, 0.2945, 0.0664444, 0.7875};	// Solar lon (0-1) of 01/01/2000
+//referenceLoactions {0.491778, 0.2945, 0.0664444, 0.7875};	// Solar lon (0-1) of 01/01/2000
 int referenceLoactions[4] = {4917, 2945,  664, 7875};	// Solar lon (0-10000) of 01/01/2000
 float orbitalSpeeds[4] = {113.636, 44.5038, 27.3823, 14.556};
 Date referenceDate = {.d = 1, .m = 1, .y = 2000};
+
 void setPositionByDate(Date d){
 	long days = getDifference(referenceDate, d);
 	for(int planet = 0; planet < 4; planet++){
 		long newPosition = (referenceLoactions[planet] + (long)(days * orbitalSpeeds[planet])) % 10000;	
 		floatPositions[planet] = newPosition / 10000.0;
-    }
+  }
 }
 
-// To store number of days in all months from January to Dec.
-const int monthDays[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
- 
-// This function counts number of leap years before the
-// given date
+const int monthDays[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}; 
+// This function counts number of leap years before the given date
 int countLeapYears(Date d) {
     int years = d.y;
     // Check if the current year needs to be considered
@@ -130,8 +127,7 @@ int countLeapYears(Date d) {
     return years / 4 - years / 100 + years / 400;
 }
  
-// This function returns number of days between two given
-// dates
+// This function returns number of days between two given dates
 int getDifference(Date dt1, Date dt2) {
     // COUNT TOTAL NUMBER OF DAYS BEFORE FIRST DATE 'dt1'
     // initialize count using years and day
