@@ -37,7 +37,9 @@ Close up:
 Video:  
 [![Video](http://img.youtube.com/vi/tbyMe05wM1g/0.jpg)](http://www.youtube.com/watch?v=tbyMe05wM1g "Orrery Working")
 
+More info found [here][thingiverse]
 
+[thingiverse]: https://www.thingiverse.com/thing:2889266
 [motors]: https://www.amazon.com/gp/product/B00PNEQI7W
 [cnc]: https://www.amazon.com/gp/product/B06XJKVLG3
 [wide]: https://i.imgur.com/hOvwWhX.jpg 
