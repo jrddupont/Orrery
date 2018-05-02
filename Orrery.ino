@@ -36,7 +36,7 @@
 
 // A date has day 'd', month 'm' and year 'y'
 struct Date {
-    int d, m, y;
+	int d, m, y;
 };
 
 byte directionPins[4] = {MRC_DIR, VNS_DIR, ERT_DIR, MRS_DIR};
@@ -54,26 +54,25 @@ void setup(){
 	Serial.begin(9600);
 	
 	// Set all direction, step, and enable pins to output
-    for(int i = 0; i < 4; i++){
+	for(int i = 0; i < 4; i++){
 		pinMode(directionPins[i], OUTPUT);
 		pinMode(stepPins[i], OUTPUT);
 	}
-    pinMode(ENABLE, OUTPUT);
+	pinMode(ENABLE, OUTPUT);
 
-    // Setup animation
+	// Setup animation
 	initAnimation();
-    
-    // 5 second delay before starting animation to allow for manual alignment
-    digitalWrite(ENABLE, HIGH);
-    delay(5000);
-    digitalWrite(ENABLE, LOW);
-    delay(500);
+	
+	// 5 second delay before starting animation to allow for manual alignment
+	digitalWrite(ENABLE, HIGH);
+	delay(5000);
+	digitalWrite(ENABLE, LOW);
+	delay(500);
 }
 
 void loop(){
-
-    #ifdef HYBRID
-    	// If there is a date input
+	#ifdef HYBRID
+		// If there is a date input
 		if (inputComplete) {
   			Serial.println(inputDate.y);
   			Serial.println(inputDate.m);
@@ -87,10 +86,10 @@ void loop(){
   			inputComplete = false;
   			initAnimation();
 		}
-    	animationStep();	// Just keep animating if there was no input
+		animationStep();	// Just keep animating if there was no input
 		delay(2);	// This can be adjusted to make it animate faster or slower
 		//delayMicroseconds(1000);	// Minimum is probably like 250 
-    #endif
+	#endif
 }
 
 // Patterns that all the planets step to while in an animation state, Mercury always steps and MARS steps 1/8 of the time, etc.
@@ -121,7 +120,7 @@ void animationStep(){
 // Must be called before attempting to animate
 void initAnimation(){
 	currentAnimationStep = 0;
-    for(int planet = 0; planet < 4; planet++){
+	for(int planet = 0; planet < 4; planet++){
 		digitalWrite(directionPins[planet], RIGHT);
 	}
 }
@@ -152,7 +151,7 @@ void stepToCurrentPosition() {
 	int steps[4] = {0, 0, 0, 0};
 	boolean dir[4] = {false, false, false, false};
 
-    for(int planet = 0; planet < 4; planet++){
+	for(int planet = 0; planet < 4; planet++){
 		int current_step = stepPositions[planet];
 		int target_step = POS_TO_STEP(floatPositions[planet]);
 		int distance_r, distance_l;
@@ -170,10 +169,10 @@ void stepToCurrentPosition() {
 		//dir[planet] = distance_l < distance_r;	// Find shortest direction
 		dir[planet] = distance_l > distance_r;	// Find longer direction
 		steps[planet] = (dir[planet] ? distance_l : distance_r);
-    }
+	}
 
-    // Move the motors
-    int maxStep = -1;
+	// Move the motors
+	int maxStep = -1;
 	for(int planet = 0; planet < 4; planet++){
 		if(steps[planet] > maxStep){
 			maxStep = steps[planet];
@@ -201,7 +200,7 @@ void stepToCurrentPosition() {
 		delayMicroseconds(STEP_DELAY); 
 		delay(1);
 	}
-    
+	
 }
 
 
@@ -229,36 +228,36 @@ void serialEvent() {
 const int monthDays[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}; 
 // This function counts number of leap years before the given date
 int countLeapYears(Date d) {
-    int years = d.y;
-    // Check if the current year needs to be considered
-    // for the count of leap years or not
-    if (d.m <= 2){
-        years--;
-    }
-    // An year is a leap year if it is a multiple of 4,
-    // multiple of 400 and not a multiple of 100.
-    return years / 4 - years / 100 + years / 400;
+	int years = d.y;
+	// Check if the current year needs to be considered
+	// for the count of leap years or not
+	if (d.m <= 2){
+		years--;
+	}
+	// An year is a leap year if it is a multiple of 4,
+	// multiple of 400 and not a multiple of 100.
+	return years / 4 - years / 100 + years / 400;
 }
  
 // This function returns number of days between two given dates
 int getDifference(Date dt1, Date dt2) {
-    // COUNT TOTAL NUMBER OF DAYS BEFORE FIRST DATE 'dt1'
-    // initialize count using years and day
-    long int n1 = dt1.y*365 + dt1.d;
-    // Add days for months in given date
-    for (int i=0; i<dt1.m - 1; i++){
-        n1 += monthDays[i];
-    }
-    // Since every leap year is of 366 days,
-    // Add a day for every leap year
-    n1 += countLeapYears(dt1);
+	// COUNT TOTAL NUMBER OF DAYS BEFORE FIRST DATE 'dt1'
+	// initialize count using years and day
+	long int n1 = dt1.y*365 + dt1.d;
+	// Add days for months in given date
+	for (int i=0; i<dt1.m - 1; i++){
+		n1 += monthDays[i];
+	}
+	// Since every leap year is of 366 days,
+	// Add a day for every leap year
+	n1 += countLeapYears(dt1);
  
-    // SIMILARLY, COUNT TOTAL NUMBER OF DAYS BEFORE 'dt2'
-    long int n2 = dt2.y*365 + dt2.d;
-    for (int i=0; i<dt2.m - 1; i++){
-        n2 += monthDays[i];
-    }
-    n2 += countLeapYears(dt2);
-    // return difference between two counts
-    return (n2 - n1);
+	// SIMILARLY, COUNT TOTAL NUMBER OF DAYS BEFORE 'dt2'
+	long int n2 = dt2.y*365 + dt2.d;
+	for (int i=0; i<dt2.m - 1; i++){
+		n2 += monthDays[i];
+	}
+	n2 += countLeapYears(dt2);
+	// return difference between two counts
+	return (n2 - n1);
 }
